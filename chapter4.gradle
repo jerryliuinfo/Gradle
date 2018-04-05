@@ -1,0 +1,159 @@
+def Task haha = task("ex41CreateTask")
+
+haha.doLast{
+    println "ex41CreateTask doLast"
+}
+
+
+def ex41CreateTask2 = task("ex41CreateTask2", group: org.gradle.api.plugins.BasePlugin.BUILD_GROUP)
+ex41CreateTask2.doLast{
+    println "ex41CreateTask2 doLast name: ${getName()}, group: ${getGroup()}"
+}
+
+
+task ex41CreateTask3{
+    description "演示任务创建"
+    doLast{
+        println "创建方法圆形为: Task create(String name, Closure configureClosure)"
+        println "任务描述: ${description}"
+    }
+
+
+}
+
+
+task ex42AccessTask2
+tasks['ex42AccessTask2'].doLast{
+    println 'ex42AccessTask2 doLast'
+}
+
+
+
+task ex42AccessTask3
+tasks['ex42AccessTask3'].doLast{
+    println tasks.findByName('ex42AccessTask3')
+    println tasks.getByName('abcedfead')
+    println tasks.findByName('abcedfead')
+}
+
+task ex42AccessTask4
+tasks['ex42AccessTask4'].doLast{
+    println tasks.findByPath('ex42AccessTask4')
+    println tasks.getByPath('abcedfead')
+    println tasks.findByPath('abcdefe')
+}
+
+
+
+def Task myTask = task ex43GroupTask
+myTask.group = "haha"
+myTask.description = "这是一个构建的引导任务"
+myTask.doLast{
+    println "ex43GroupTask group: ${group}, descripton: ${description}"
+}
+
+
+task ex44DoLastTask << {
+    println "ex44DoLast doLast"
+}
+
+task ex44DoLastTask.doLast {
+    println "ex44DoLast doLast"
+}
+
+
+def Task task1 = task ex45CustomTask(){
+
+}
+
+task1.doFirst{
+    println "task1.doFirst"
+}
+task1.doLast{
+    println "task1.doLast"
+}
+
+class CustomTask extends DefaultTask{
+
+
+}
+
+
+
+task ex46OrderTasks1 << {
+    println "ex46OrderTasks1"
+}
+
+task ex46OrderTasks2 << {
+    println "ex46OrderTasks2"
+}
+ex46OrderTasks1.mustRunAfter ex46OrderTasks2
+
+
+
+
+task ex47DiabledTask << {
+    println 'ex47DiabledTask'
+}
+
+ex47DiabledTask.enabled = false
+
+
+
+task ex48QQRelase <<{
+    println "打应用宝的包"
+}
+
+task ex48BaiduRelase <<{
+    println "打百度的包"
+}
+
+task ex48HuaWeiRelase <<{
+    println "打华为的包"
+}
+
+task ex48MiUIRelase <<{
+    println "打小米的包"
+}
+
+task buildApk{
+    group BasePlugin.BUILD_GROUP
+    description "渠道包"
+}
+
+buildApk {}.dependsOn ex48QQRelase,ex48BaiduRelase,ex48HuaWeiRelase,ex48MiUIRelase
+
+final String BUILD_APPS_ALL = "all"
+final String BUILD_APPS_SHOUFA = "shoufa"
+final String BUILD_EXECUTED_SHOUFA = "exclude_shoufa"
+ex48QQRelase {}.onlyIf {
+    execute(BUILD_APPS_SHOUFA)
+}
+
+ex48BaiduRelase {}.onlyIf {
+    execute(BUILD_APPS_SHOUFA)
+}
+
+
+ex48HuaWeiRelase {}.onlyIf {
+    execute(BUILD_EXECUTED_SHOUFA)
+}
+
+ex48MiUIRelase {}.onlyIf {
+    execute(BUILD_EXECUTED_SHOUFA)
+}
+
+def execute(String qudao){
+    def execute;
+    if (project.hasProperty('build_apps')){
+        def build_apps = project.property("build_apps")
+        if ( BUILD_APPS_ALL.equalsIgnoreCase(build_apps) || qudao.equalsIgnoreCase(build_apps)){
+            execute =  true;
+        }else {
+            execute = false;
+        }
+    }else{
+        execute = true;
+    }
+    execute
+}

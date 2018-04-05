@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-
+//apply from: "task.gradle"
 android {
     compileSdkVersion 26
     buildToolsVersion "26.0.2"
@@ -19,6 +19,15 @@ android {
     }
 }
 
+sourceSets{
+    main{
+        resources.srcDirs = ['src/main/res']
+    }
+    google{
+        resources.srcDirs = ['src/google/res']
+    }
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -27,4 +36,13 @@ dependencies {
     compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
+}
+
+
+task ex37CustomProperty{
+    println "年龄: ${age}, phone: ${phone} , married: ${married}"
+
+    sourceSets.each {
+        println "${it.name} 的resourcesDir : ${it.resources.srcDirs}"
+    }
 }

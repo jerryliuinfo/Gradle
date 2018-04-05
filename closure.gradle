@@ -1,0 +1,108 @@
+task HelloClosure{
+    customEach{
+        println it
+    }
+}
+
+
+def customEach(closure){
+    for (int i in 1..3){
+        closure(i)
+        //println "i = ${i}"
+    }
+}
+
+task HelloClosure2{
+    eachMap{k,v ->
+        println "${k} is ${v}"
+    }
+}
+
+def eachMap(closure ){
+    def map1 = ["name":"zhangsan", "age":20]
+    map1.each {
+        closure(it.key,it.value)
+        closure.call(it.key,it.value)
+    }
+}
+
+
+def greeting = "hello"
+
+def close = {param -> println "${greeting} ${param}"
+
+}
+
+task printGreeting{
+    close "豪哥"
+}
+
+def demo(closure){
+    closure.call("ken")
+}
+
+task printGreeting2{
+    demo(){param ->
+        println "welecome ${param}"
+
+    }
+}
+
+
+task HelloDelegate{
+    new Delegate().test {
+        println "thisObject: ${thisObject.getClass()}"
+        println "ower: ${owner.getClass()}"
+        println "delegate: ${delegate.getClass()}"
+        //method1()
+    }
+}
+
+
+class Delegate{
+    def method1(){
+        println "Delegate this: ${this.getClass()} in Delegate"
+        println "method1 in Delegate"
+    }
+
+    def test(Closure<Delegate> closure){
+        closure(this)
+    }
+}
+
+
+
+task configClosure{
+    person {
+        personName = "zhangsan"
+        personAge = 14;
+        dumpPerson()
+    }
+}
+
+class Person{
+    String personName
+    int personAge
+
+    def dumpPerson(){
+        println "name is ${personName}, age is ${personAge}"
+    }
+}
+
+
+def person(Closure<Person> closure){
+    Person p = new Person();
+    closure.delegate = p;
+    closure.setResolveStrategy(groovy.lang.Closure.DELEGATE_FIRST)
+    closure(p)
+}
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,100 @@
+task printStringVar  {
+    doLast{
+        def name = "zhangsan"
+        def age = 10
+        logger.quiet('单引号的变量计算:${name}')
+        logger.quiet("单引号的变量计算:${name}")
+    }
+
+}
+
+task printList{
+    def list =[1,3,4,1,2,8,9,6]
+    logger.quiet(list.getClass().name)
+
+    logger.quiet("list[1] = ${list[1]} ")
+    logger.quiet("list[-1] = ${list[-1]} ")
+    logger.quiet("list[1..3] = ${list[1..3]} ")
+
+    list.each {
+        logger.quiet("value = ${it}")
+
+    }
+
+    /**
+     * find()会找到第一次出现的匹配对象,它只会迭代到闭包返回true为止。已得到true，
+     * find方法就会停止迭代，并将当前的元素返回。如果遍历结束也没得到true，则返回null。
+     */
+    def findValue = list.find{it > 4}
+
+    /**
+     * 查找list元素，返回所有符合条件元素
+     */
+    def findAllVlaue = list.findAll{it > 4}
+    /**
+     * 查找list元素，返回第一次出现的匹配对象的索引
+     */
+    def indexOf = list.findIndexOf {it > 4}
+    println "find value = ${findValue}, findAllValue = ${findAllVlaue}, indexOf = ${indexOf}"
+
+}
+
+
+task printMap{
+    def map = ['width':1024, 'height':768]
+    println(map.getClass().name)
+
+    println("widht = ${map['width']}, height = ${map['height']}")
+    map.each {
+        logger.quiet("key: ${it.key}, value: ${it.value}")
+    }
+}
+
+
+task invokeMethod{
+    print(" ${plus(1,2)}")
+    plus 3,4
+}
+
+def plus(int a, int b){
+    return a + b
+}
+
+
+task printMethodReturn{
+    def add1 = method2(2,6)
+    def add2 = method2(7,4)
+    println "add1 = ${add1}, add2 = ${add2}"
+
+}
+
+
+def method2(int a, int b){
+    if (a > b){
+        a
+    }else {
+        b
+    }
+}
+
+
+class Person{
+    private String name;
+
+    private int getAge(){
+        12
+    }
+}
+
+task HelloJaveBean{
+    Person person = new Person();
+    println "名字是${person.name}"
+
+    person.name = "zhangsan"
+    println "名字是${person.name}"
+
+    println "年龄是${person.age}"
+}
+
+
+

@@ -1,0 +1,71 @@
+task customTask1{
+    doFirst{
+        println "customTask1 doFirst"
+    }
+    doLast{
+        println "customTask1 doLast"
+    }
+}
+
+tasks.create("customTask2"){
+    doFirst{
+        println "CustomTask2 doFirst"
+    }
+
+    doLast{
+        println "CustomTask2 doLast"
+    }
+}
+
+task generateApk1{
+    println "generateApk1"
+}
+
+
+task ex35Hello{
+    println "ex35Hello"
+}
+
+task ex35World(dependsOn: ex35Hello){
+    println "ex35World"
+}
+
+task ex35MultiTask{
+    dependsOn ex35Hello,ex35World
+    doLast{
+        println "ex35MultiTask"
+    }
+}
+
+
+task ex36Hello{
+    println "ex36Hello doLast1"
+
+    ext.compay = "hawk"
+}
+
+ex36Hello.doLast{
+    println "ex36Hello doLast"
+    println project.hasProperty("ex36Hello")
+}
+
+ex36Hello.doFirst{
+    println "ex36Hello doFirst"
+}
+
+
+
+
+
+def buildTime(){
+    def data = new Date();
+    def formatDate = data.format("yyyyMMdd")
+    return formatDate
+}
+
+
+task ex38Task{
+    println "buildTime: ${buildTime()}"
+}
+
+
