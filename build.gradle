@@ -2,7 +2,8 @@
 //apply from: "chapter1.gradle"
 //apply from: "chapter2.gradle"
 //apply from: "chapter3.gradle"
-apply from: "chapter4.gradle"
+//apply from: "chapter4.gradle"
+apply from: "chapter5.gradle"
 //apply from: "closure.gradle"
 buildscript {
     repositories {

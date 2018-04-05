@@ -1,0 +1,20 @@
+apply from: "version.gradle"
+
+task ex52PrintTask  {
+    println "App版本号: ${versionCode}, 版本名称: ${versionNmae}"
+}
+
+//apply plugin: Ex53CustomPlugin
+
+class Ex53CustomPlugin implements Plugin<Project>{
+
+    @Override
+    void apply(Project target) {
+        project.task('ex53CustomTask') << {
+            println "这是一个通过自定义插件方式创建的任务"
+        }
+    }
+}
+
+
+
