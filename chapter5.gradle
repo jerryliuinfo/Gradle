@@ -2,6 +2,10 @@ apply from: "version.gradle"
 
 task ex52PrintTask  {
     println "App版本号: ${versionCode}, 版本名称: ${versionNmae}"
+
+    println "rootDir = ${rootDir}, project = ${getProjectDir()}"
+
+
 }
 
 //apply plugin: Ex53CustomPlugin

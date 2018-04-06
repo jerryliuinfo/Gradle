@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion(26)
     buildToolsVersion "26.0.2"
     defaultConfig {
         applicationId "com.apache.gradle"
@@ -19,14 +19,48 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    productFlavors{
+        dev{
+
+        }
+
+        google{
+
+        }
+    }
+
+
+    applicationVariants.all{ variantType ->
+        variantType.outputs.each {outputType ->
+            if (outputType.outputFile != null && outputType.outputFile.name.endsWith(".apk")){
+                if (true || "release".equals(variantType.buildType.name)){
+                    String flavorName = variantType.flavorName
+                    variantType.buildConfigField('String', 'publish_type', "\"qq\"")
+                    println "----------->applicationVariants.all: ${flavorName}"
+                    String apkName = "Gradle_"+variantType.versionCode +"_"+variantType.versionName +"_"+flavorName +"_"+getBuildTime()+".apk"
+                    def apkFile = new File(outputType.outputFile.getParent(),apkName)
+                    outputType.outputFile = apkFile;
+                }
+            }
+        }
+
+    }
+}
+
+
+
+
+
+def String getBuildTime(){
+    def Date date = new Date();
+    date.format("yyyymmdd")
+    date
 }
 
 sourceSets{
     main{
         resources.srcDirs = ['src/main/res']
-    }
-    google{
-        resources.srcDirs = ['src/google/res']
     }
 }
 
@@ -52,7 +86,7 @@ task ex37CustomProperty{
 
 task myJar(type: Jar){
     from 'build/libs/aop-1.0.1.jar'
-    into '../app/libs'
+    into 'libs'
 }
 
 
@@ -76,6 +110,29 @@ buildscript {
 
 
 
+
+
+task publishJar(type: Jar){
+    println '------------------------'
+    println 'publishJar'
+    println '------------------------'
+
+}
+
+version '1.0.0'
+artifacts{
+    archives publishJar
+}
+
+uploadArchives{
+    repositories{
+        flatDir{
+            name 'libs'
+            dirs "$project/libs"
+        }
+
+    }
+}
 
 
 
